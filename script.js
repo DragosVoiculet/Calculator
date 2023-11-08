@@ -5,8 +5,8 @@ const signSwapBtn = document.querySelector('#sign-swap-button');
 const divideBtn = document.querySelector('#divide');
 const numberBtnArr = document.querySelectorAll('.number-button')
 const operationBtnArr = document.querySelectorAll('.operation-buttons')
-const equalBtn = document.querySelector('#equal')
-
+const equalBtn = document.querySelector('#equal');
+const decimalBtn = document.querySelector('#decimal-button')
 
 const calculator = {
   display : '0' ,
@@ -18,7 +18,7 @@ const calculator = {
     calculatorText.textContent = this.display;
   },
   clear(){
-    this.display = '';
+    this.display = '0';
     this.firstOperand = null;
     this.operator = null;
     this.updateDisplay();
@@ -33,7 +33,7 @@ const calculator = {
   },
   setOperator(operator){
     if(this.operator === null){
-      this.firstOperand = parseInt(this.display)
+      this.firstOperand = parseFloat(this.display)
       this.operator = operator;
       this.display = '0';
     }else {
@@ -43,22 +43,22 @@ const calculator = {
   },
   calculate (){
     if(this.firstOperand && this.operator){
-      this.secondOperand = parseInt(this.display);
+      this.secondOperand = parseFloat(this.display);
       switch(this.operator){
         case '+':
-          this.display = this.firstOperand+this.secondOperand;
+          this.display = `${this.firstOperand+this.secondOperand}`;
           break;
         case '-':
-          this.display = this.firstOperand-this.secondOperand;
+          this.display = `${this.firstOperand-this.secondOperand}`;
           break;
         case 'X':
-          this.display = this.firstOperand*this.secondOperand;
+          this.display = `${this.firstOperand*this.secondOperand}`;
           break;
         case '/':
           if(this.secondOperand===0){
             this.display ='WAT?';
           }else{
-          this.display = this.firstOperand/this.secondOperand;
+          this.display = `${this.firstOperand/this.secondOperand}`;
           }
           break;
           default:
@@ -70,9 +70,24 @@ const calculator = {
       this.secondOperand = null;
     }
   },
+  swapSign(){
+    this.display=-this.display;
+    this.updateDisplay();
+
+  },
+  percentage(){
+    this.display = this.display * 0.01;
+    this.updateDisplay();
+  },
+  decimal(){
+    if(!this.display.includes('.')){
+      this.display+='.'
+    }
+    this.updateDisplay()
+  },
   
 }
-
+calculator.updateDisplay()
 numberBtnArr.forEach(numberBtn => {
   numberBtn.addEventListener('click', () => {
     calculator.appendNumber(numberBtn.textContent);
@@ -91,4 +106,14 @@ operationBtnArr.forEach(operationBtn => {
   equalBtn.addEventListener('click', () => {
     calculator.calculate();
   });
+  signSwapBtn.addEventListener('click', () =>{
+    calculator.swapSign();
+  });
+  moduloBtn.addEventListener('click', ()=>{
+    calculator.percentage();
+  });
+  decimalBtn.addEventListener('click', () =>{
+    calculator.decimal();
+  })
+  
 
