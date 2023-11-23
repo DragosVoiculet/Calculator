@@ -32,17 +32,21 @@ const calculator = {
     this.updateDisplay();
   },
   setOperator(operator){
+    if (this.display === 'WAT?') {
+      this.clear();
+    }
     if(this.operator === null){
       this.firstOperand = parseFloat(this.display)
       this.operator = operator;
       this.display = '0';
     }else {
       this.operator = operator;
+      
     }
     this.updateDisplay();
   },
   calculate (){
-    if(this.firstOperand && this.operator){
+    if(this.firstOperand !== null && this.operator){
       this.secondOperand = parseFloat(this.display);
       switch(this.operator){
         case '+':
@@ -55,12 +59,13 @@ const calculator = {
           this.display = `${this.firstOperand*this.secondOperand}`;
           break;
         case '/':
-          if(this.secondOperand===0){
-            this.display ='WAT?';
-          }else{
-          this.display = `${this.firstOperand/this.secondOperand}`;
-          }
-          break;
+          if (this.secondOperand === 0) {
+            this.clear(); // Clear the calculator state
+            this.display = 'WAT?';
+            } else {
+              this.display = `${this.firstOperand / this.secondOperand}`;
+            }
+            break;
           default:
             break;
       }
